@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,20 +17,24 @@ class _HomePage extends State<HomePage> with SingleTickerProviderStateMixin {
       vsync: this,
       duration: const Duration(seconds: 3),
     );
+
+    /// Animation を繰り返し
     controller.repeat();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      child: Container(width: 200, height: 200, color: Colors.red),
-      builder: (context, child) {
-        return Transform.rotate(
-          angle: controller.value * 2.0 * pi,
-          child: child,
-        );
-      },
+    return Scaffold(
+      body: AnimatedBuilder(
+        animation: controller,
+        child: const Text('DVD'),
+        builder: (context, child) {
+          /// 入射角、反射角ともに 45°に反射するアニメーションをここに書く
+          return Transform.translate(
+            offset: const Offset(50, 50),
+          );
+        },
+      ),
     );
   }
 
