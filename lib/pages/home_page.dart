@@ -11,8 +11,7 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage>
-    with TickerProviderStateMixin {
+class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late Size deviceSize;
@@ -30,7 +29,7 @@ class HomePageState extends State<HomePage>
     /// ３秒間でアニメーション
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5),
     );
 
     /// ランダムで デバイスの縦横の値 × 0.8 の値 を取得
