@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animation_sample_app/utils/vector_branch.dart';
-import 'package:flutter_animation_sample_app/utils/vector_forward.dart';
+
+import '../utils/vector_branch.dart';
+import '../utils/vector_forward.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   HomePageState createState() => HomePageState();
 }
@@ -29,7 +29,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     /// ３秒間でアニメーション
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 3),
     );
 
     /// ランダムで デバイスの縦横の値 × 0.8 の値 を取得
@@ -43,21 +43,25 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _offsetAnimation = Tween<Offset>(
       begin: Offset(randomWidth, randomHeight),
       end: Offset(
+        // deviceSize.width - 75,
         randomWidth +
             VectorForward(
               vectorBranchX(randomVector),
               vectorBranchY(randomVector),
             ).x,
+        // deviceSize.height - 60
         randomHeight +
             VectorForward(
               vectorBranchX(randomVector),
               vectorBranchY(randomVector),
             ).y,
       ),
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.linear,
+      ),
+    );
     _controller.repeat();
   }
 
