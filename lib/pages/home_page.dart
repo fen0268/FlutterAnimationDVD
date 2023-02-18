@@ -23,6 +23,47 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     offset = box!.localToGlobal(Offset.zero);
   }
 
+  void vectorChange() {
+    super.didChangeDependencies();
+    deviceSize = MediaQuery.of(context).size;
+
+    /// ３秒間でアニメーション
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 100),
+    );
+
+    /// ベクトルの向きの４方向をランダムで取得
+    /// 0 => 右上, 1 => 左上, 2 => 左下, 3 => 右下
+    int randomVector = Random().nextInt(4);
+    print(randomVector);
+
+    _offsetAnimation = Tween<Offset>(
+      /// GlobalKey の値のままだと FAB を押した瞬間に Text が少し下にずれる原因について
+      begin: Offset(offset!.dx, offset!.dy - 24),
+      end: Offset(
+        // deviceSize.width - 75,
+        offset!.dx +
+            VectorForward(
+              vectorBranchX(randomVector),
+              vectorBranchY(randomVector),
+            ).x,
+        // deviceSize.height - 60
+        offset!.dy +
+            VectorForward(
+              vectorBranchX(randomVector),
+              vectorBranchY(randomVector),
+            ).y,
+      ),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.linear,
+      ),
+    );
+    _controller.repeat();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,12 +81,12 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     /// ランダムで デバイスの縦横の値 × 0.8 の値 を取得
-    var randomWidth = Random().nextDouble() * deviceSize.width * 0.8;
-    var randomHeight = Random().nextDouble() * deviceSize.height * 0.8;
+    double randomWidth = Random().nextDouble() * deviceSize.width * 0.8;
+    double randomHeight = Random().nextDouble() * deviceSize.height * 0.8;
 
     /// ベクトルの向きの４方向をランダムで取得
     /// 0 => 右上, 1 => 左上, 2 => 左下, 3 => 右下
-    var randomVector = Random().nextInt(4);
+    int randomVector = Random().nextInt(4);
 
     _offsetAnimation = Tween<Offset>(
       begin: Offset(randomWidth, randomHeight),
@@ -69,7 +110,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         curve: Curves.linear,
       ),
     );
-    _controller.repeat();
   }
 
   @override
@@ -84,7 +124,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: SafeArea(
         child: AnimatedBuilder(
           animation: _offsetAnimation,
-          key: GlobalKey(),
           child: Text(
             "DVD",
             style: const TextStyle(fontSize: 40),
@@ -102,7 +141,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         onPressed: () {
           setState(() {
             getPosition();
-            didChangeDependencies();
+            vectorChange();
+            debugPrint('${offset!.dx}');
           });
         },
       ),
