@@ -16,6 +16,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Animation<Offset> _offsetAnimation;
   late Size deviceSize;
   GlobalKey textKey = GlobalKey();
+  Offset? offset;
+
+  void getPosition() {
+    final box = textKey.currentContext!.findRenderObject() as RenderBox?;
+    offset = box!.localToGlobal(Offset.zero);
+    debugPrint('${offset!.dx}, ${offset!.dy}');
+  }
 
   @override
   void initState() {
@@ -74,7 +81,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: AnimatedBuilder(
@@ -96,9 +102,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            debugPrint('${textKey.currentContext?.findRenderObject()}');
-            _controller.reset();
-            _offsetAnimation.removeStatusListener((status) {});
+            getPosition();
             didChangeDependencies();
           });
         },
