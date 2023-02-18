@@ -15,6 +15,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late Size deviceSize;
+  GlobalKey textKey = GlobalKey();
 
   @override
   void initState() {
@@ -73,14 +74,16 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: AnimatedBuilder(
           animation: _offsetAnimation,
           key: GlobalKey(),
-          child: const Text(
+          child: Text(
             "DVD",
-            style: TextStyle(fontSize: 40),
+            style: const TextStyle(fontSize: 40),
+            key: textKey,
           ),
           builder: (context, _) {
             return Transform.translate(
@@ -93,6 +96,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
+            debugPrint('${textKey.currentContext?.findRenderObject()}');
             _controller.reset();
             _offsetAnimation.removeStatusListener((status) {});
             didChangeDependencies();
