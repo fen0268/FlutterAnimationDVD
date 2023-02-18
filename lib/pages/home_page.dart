@@ -19,9 +19,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Offset? offset;
 
   void getPosition() {
-    final box = textKey.currentContext!.findRenderObject() as RenderBox?;
+    RenderBox? box = textKey.currentContext!.findRenderObject() as RenderBox?;
     offset = box!.localToGlobal(Offset.zero);
-    debugPrint('${offset!.dx}, ${offset!.dy}');
   }
 
   @override
