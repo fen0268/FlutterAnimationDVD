@@ -43,13 +43,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _offsetAnimation = Tween<Offset>(
       begin: Offset(randomWidth, randomHeight),
       end: Offset(
-        // deviceSize.width - 75,
         randomWidth +
             VectorForward(
               vectorBranchX(randomVector),
               vectorBranchY(randomVector),
             ).x,
-        // deviceSize.height - 60
         randomHeight +
             VectorForward(
               vectorBranchX(randomVector),
@@ -77,14 +75,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: SafeArea(
         child: AnimatedBuilder(
           animation: _offsetAnimation,
-          child: const Text(
-            "DVD",
-            style: TextStyle(fontSize: 40),
-          ),
           builder: (context, _) {
             return Transform.translate(
               offset: _offsetAnimation.value,
-              child: _,
+              child: const Text(
+                "DVD",
+                style: TextStyle(fontSize: 40),
+              ),
             );
           },
         ),
