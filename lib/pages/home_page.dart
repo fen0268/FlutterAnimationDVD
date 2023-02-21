@@ -7,12 +7,28 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  Offset vector = const Offset(10, 10);
-  var location = const Offset(100, 100);
+  Offset vector = const Offset(1, -1);
+  var location = const Offset(1, 110);
 
-  void a() async {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void addPosition() async {
     while (true) {
-      Future.delayed(const Duration(milliseconds: 160));
+      if (location.dy == 0) {
+        setState(() {
+          
+        });
+        vector = const Offset(1, 1);
+      }
+      await Future.delayed(const Duration(milliseconds: 10));
       setState(() {
         location += vector;
       });
@@ -22,19 +38,24 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: location.dx,
-            left: location.dy,
-            child: const Text('DVD'),
-          ),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
+              top: location.dy,
+              left: location.dx,
+              child: const Text(
+                'DVD',
+                style: TextStyle(fontSize: 40),
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            a();
+            addPosition();
           });
         },
       ),
