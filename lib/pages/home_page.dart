@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_sample_app/pages/setting_page.dart';
 import 'package:flutter_animation_sample_app/utils/vector.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,17 +16,32 @@ class HomePageState extends State<HomePage> {
   final randomVector = Random().nextInt(4);
   late var vector = vectors(randomVector);
   late Size deviceLength;
-  var location = const Offset(100, 110);
+  var location = const Offset(110, 110);
+  GlobalKey textKey = GlobalKey();
+  var textSize = const Size(60, 60);
 
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     deviceLength = MediaQuery.of(context).size;
+    await Future.delayed(const Duration(milliseconds: 500));
+    addPosition();
+    getPosition();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void getPosition() {
+    final box = textKey.currentContext!.findRenderObject() as RenderBox?;
+    textSize = box!.size;
   }
 
   void addPosition() async {
@@ -49,20 +65,22 @@ class HomePageState extends State<HomePage> {
       }
 
       /// 下
-      if (location.dy >= deviceLength.height - 60 && vector == vectors(3)) {
+      if (location.dy >= deviceLength.height - textSize.height &&
+          vector == vectors(3)) {
         setState(() {});
         vector = vectors(0);
-      } else if (location.dy >= deviceLength.height - 60 &&
+      } else if (location.dy >= deviceLength.height - textSize.height &&
           vector == vectors(2)) {
         setState(() {});
         vector = vectors(1);
       }
 
       /// 右
-      if (location.dx >= deviceLength.width - 65 && vector == vectors(0)) {
+      if (location.dx >= deviceLength.width - textSize.width &&
+          vector == vectors(0)) {
         setState(() {});
         vector = vectors(1);
-      } else if (location.dx >= deviceLength.width - 65 &&
+      } else if (location.dx >= deviceLength.width - textSize.width &&
           vector == vectors(3)) {
         setState(() {});
         vector = vectors(2);
@@ -78,25 +96,28 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(
-              top: location.dy,
-              left: location.dx,
-              child: const Text(
-                'DVD',
-                style: TextStyle(fontSize: 40),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const SettingPage(),
               ),
-            ),
-          ],
+            );
+          },
+          child: Stack(
+            children: [
+              Positioned(
+                top: location.dy,
+                left: location.dx,
+                child: Text(
+                  'DVD',
+                  style: const TextStyle(fontSize: 60),
+                  key: textKey,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            addPosition();
-          });
-        },
       ),
     );
   }
