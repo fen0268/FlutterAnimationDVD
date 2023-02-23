@@ -3,14 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_sample_app/pages/setting_page.dart';
 import 'package:flutter_animation_sample_app/utils/vector.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends ConsumerState<HomePage> {
   /// ベクトルの向きの４方向をランダムで取得
   /// 0 => 右上, 1 => 左上, 2 => 左下, 3 => 右下
   final randomVector = Random().nextInt(4);
